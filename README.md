@@ -5,7 +5,7 @@ Automated Enterprise Endpoint management lab demonstrating Active Directory admi
 
 ## Environment
 - **Infrastructure**: ARM templates deployed via YAML pipeline
-- **Domain Controller**: Windows Server 2022 with Active Directory
+- **Domain Controller**: Windows Server 2019 with Active Directory
 - **Client Endpoints**: Windows 10 workstations
 - **Automation**: PowerShell scripting for user management and deployment
 
