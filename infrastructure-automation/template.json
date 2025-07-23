@@ -1,0 +1,254 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "securestring"
+    },
+    "winServerAdminPassword": {
+        "type": "securestring",
+        "metadata": {
+            "description": "Admin password for Windows Server VM"
+        }
+    },
+    "win10AdminPassword": {
+        "type": "securestring",
+        "metadata": {
+            "description": "Admin password for Windows 10 VM"
+        }
+    }
+  },
+  // TODO: UPDATE THESE VARIABLES WITH YOUR PREFERRED VALUES!
+  "variables": {
+    "vnetName": "YOUR-VNET-NAME-HERE",
+    "subnetName": "YOUR-SUBNET-NAME-HERE",
+    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]",
+    "nsgNameWindowsServer": "YOUR-SERVER-NSG-NAME-HERE",
+    "nsgNameWindows10": "YOUR-WINDOWS10-NSG-NAME-HERE",
+    "publicIPNameWindowsServer": "YOUR-SERVER-PUBLICIP-NAME-HERE",
+    "publicIPNameWindows10": "YOUR-WINDOWS10-PUBLICIP-NAME-HERE",
+    "nicNameWindowsServer": "YOUR-SERVER-NIC-NAME-HERE",
+    "nicNameWindows10": "YOUR-WINDOWS10-PUBLICIP-NAME-HERE",
+    "vmSize": "Standard_DS2_v2",
+    "imagePublisherServer": "MicrosoftWindowsServer",
+    "imageOfferServer": "WindowsServer",
+    "imageSkuServer": "2019-Datacenter",
+    "imagePublisherWin10": "MicrosoftWindowsDesktop",
+    "imageOfferWin10": "Windows-10",
+    "imageSkuWin10": "win10-22h2-pro-g2",
+    "vnetLocation": "YOUR-VNET-LOCATION-HERE", 
+    "vmLocation": "YOUR-VM-LOCATION-HERE" 
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-05-01",
+      "location": "[variables('vnetLocation')]",
+      "name": "[variables('vnetName')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('publicIPNameWindowsServer')]",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('publicIPNameWindows10')]",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('nsgNameWindowsServer')]",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AllowRDP",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "priority": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('nsgNameWindows10')]",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AllowRDP",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "priority": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2024-05-01",
+      "name": "[variables('nicNameWindowsServer')]",
+      "location": "[variables('vmLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetId')]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPNameWindowsServer'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2024-05-01",
+      "name": "[variables('nicNameWindows10')]",
+      "location": "[variables('vmLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig2",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetId')]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPNameWindows10'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-07-01",
+      "name": "vmWindowsServ",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisherServer')]",
+            "offer": "[variables('imageOfferServer')]",
+            "sku": "[variables('imageSkuServer')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            }
+          }
+        },
+        "osProfile": {
+          "computerName": "vmWindowsServ",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('winServerAdminPassword')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicNameWindowsServer'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-07-01",
+      "name": "vmWindows10",
+      "location": "[variables('vmLocation')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisherWin10')]",
+            "offer": "[variables('imageOfferWin10')]",
+            "sku": "[variables('imageSkuWin10')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            }
+          }
+        },
+        "osProfile": {
+          "computerName": "vmWindows10",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('win10AdminPassword')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicNameWindows10'))]"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
