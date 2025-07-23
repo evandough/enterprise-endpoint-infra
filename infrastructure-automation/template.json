@@ -28,7 +28,7 @@
     "publicIPNameWindowsServer": "YOUR-SERVER-PUBLICIP-NAME-HERE",
     "publicIPNameWindows10": "YOUR-WINDOWS10-PUBLICIP-NAME-HERE",
     "nicNameWindowsServer": "YOUR-SERVER-NIC-NAME-HERE",
-    "nicNameWindows10": "YOUR-WINDOWS10-PUBLICIP-NAME-HERE",
+    "nicNameWindows10": "YOUR-WINDOWS10-NIC-NAME-HERE",
     "vmSize": "Standard_DS2_v2",
     "imagePublisherServer": "MicrosoftWindowsServer",
     "imageOfferServer": "WindowsServer",
@@ -36,8 +36,8 @@
     "imagePublisherWin10": "MicrosoftWindowsDesktop",
     "imageOfferWin10": "Windows-10",
     "imageSkuWin10": "win10-22h2-pro-g2",
-    "vnetLocation": "YOUR-VNET-LOCATION-HERE", 
-    "vmLocation": "YOUR-VM-LOCATION-HERE" 
+    "vnetLocation": "YOUR-VNET-LOCATION-HERE", // e.g., eastus
+    "vmLocation": "YOUR-VM-LOCATION-HERE" // e.g., eastus
   },
   "resources": [
     {
@@ -92,7 +92,7 @@
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
-              "sourceAddressPrefix": "*",
+              "sourceAddressPrefix": "*", // NOTE: Open RDP to all IPs – not secure for production use
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "direction": "Inbound",
@@ -115,7 +115,7 @@
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
-              "sourceAddressPrefix": "*",
+              "sourceAddressPrefix": "*", // NOTE: Open RDP to all IPs – not secure for production use
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "direction": "Inbound",
