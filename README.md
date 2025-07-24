@@ -4,9 +4,10 @@
 Automated Enterprise Endpoint management lab demonstrating Active Directory administration, PowerShell automation, and Infrastructure-as-Code (IaC) deployment using Azure DevOps pipelines.
 
 ## Environment
+- **Cloud platform**: Microsoft Azure
 - **Infrastructure**: ARM templates deployed via YAML pipeline
-- **Domain Controller**: Windows Server 2019 with Active Directory
-- **Client Endpoints**: Windows 10 workstations
+- **Domain Controller**: Windows Server 2019 with Active Directory (Azure VM)
+- **Client Endpoints**: Windows 10 workstation (Azure VM)
 - **Automation**: PowerShell scripting for user management and deployment
 
 ## Key Demonstrations
@@ -18,6 +19,7 @@ Automated Enterprise Endpoint management lab demonstrating Active Directory admi
 
 ## Tools Used
 - Infrastructure as Code (Azure DevOps YAML pipelines)
+- Microsoft Azure cloud services (Virtual Machines, Virtual Networks, NSGs)
 - Windows Server administration and Active Directory management
 - PowerShell scripting and automation
 - Group Policy management for software deployment
