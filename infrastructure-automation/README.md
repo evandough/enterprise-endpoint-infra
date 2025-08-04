@@ -3,11 +3,12 @@
 ARM template that deploys a Windows Server 2019 Domain Controller and Windows 10 client in an isolated Azure virtual network for Active Directory lab environments.
 
 ## TL;DR
-Update variables in `template.json` before deployment! This is a test lab environment - beef up security controls for production use.
+- Update variables in `template.json` before deployment!
+- This is a test lab environment - beef up security controls for production use.
 
 ## Resources Created
-- Virtual Network: YOUR-VNET-NAME-HERE (10.0.0.0/16)
-- Subnet: YOUR-SUBNET-NAME-HERE (10.0.0.0/24)
+- Virtual Network: **YOUR-VNET-NAME-HERE** (10.0.0.0/16)
+- Subnet: **YOUR-SUBNET-NAME-HERE** (10.0.0.0/24)
 - Windows Server 2019 VM: Domain Controller role
 - Windows 10 Pro VM: Domain member client
 - Network Security Groups: RDP access (port 3389)
