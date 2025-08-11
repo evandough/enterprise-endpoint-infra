@@ -26,6 +26,7 @@ You can also modify:
 - Network address spaces (currently 10.0.0.0/16)
 
 ## Required Pipeline Variables - Note: DO NOT HARDCODE PASSWORDS
+Use this link to [setup an Azure Key Vault](https://github.com/evandough/Cloud-Journey/blob/main/Journey/010/Readme.md) and this link to [setup a Variable Group to securely pass secrets.](https://github.com/evandough/Cloud-Journey/blob/main/Journey/011/Readme.md)
 - `adminUsername`: Local admin username for both VMs
 - `winServerAdminPassword`: Secure password for Windows Server
 - `win10AdminPassword`: Secure password for Windows 10 VM
