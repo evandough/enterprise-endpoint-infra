@@ -1,0 +1,33 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- group: VARIABLE_GROUP_PLACEHOLDER  # Reference your Variable Group name
+
+- name: resourceGroupName
+  value: 'RESOURCE_GROUP_NAME_PLACEHOLDER' # Your resource group name
+- name: templateFile
+  value: 'PATH_TO_YOUR\template.json' # Path to your template.json file
+- name: location
+  value: 'LOCATION_PLACEHOLDER' # e.g., West US
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Deploy ARM Template'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(azureResourceManagerConnection)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(templateFile)'
+    overrideParameters: >
+      -adminUsername "$(adminUsername)"
+      -winServerAdminPassword "$(winServerAdminPassword)"
+      -win10AdminPassword "$(win10AdminPassword)"
+    deploymentMode: 'Incremental'
