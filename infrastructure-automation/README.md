@@ -18,7 +18,8 @@ ARM template that deploys a Windows Server 2019 Domain Controller and Windows 10
 ## Template Customization
 **BEFORE DEPLOYMENT**
 <br></br>
-Edit `template.json` and update the variables with your preferred values
+- Edit `template.json` and update the variables with your preferred values
+- Edit `deploy.json` and update the variables with your preferred values
 
 ## Optional Customizations
 You can also modify:
