@@ -3,7 +3,7 @@
 ARM template that deploys a Windows Server 2019 Domain Controller and Windows 10 client in an isolated Azure virtual network for Active Directory lab environments.
 
 ## TL;DR
--This is a test lab environment - beef up security controls for production use. Future revisions will be made. 
+- This is a test lab environment - beef up security controls for production use. Future revisions will be made. 
 - Update variables in `template.json` and `deploy.yaml` before deployment!
 
 ## Resources Created
